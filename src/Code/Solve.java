@@ -97,8 +97,8 @@ public class Solve {
 							WriteResule(rowWritten, lastdiff, outputPath, fileIdx++);
 							long end = System.currentTimeMillis();
 							writeCost += end - start;
-							rowWritten = -1;
 						}
+						rowWritten = -1;
 					}
 				} else {
 					lastdiff = i;
