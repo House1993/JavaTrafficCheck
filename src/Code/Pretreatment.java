@@ -40,11 +40,6 @@ public class Pretreatment {
 					nodes.put(tmpId, tmpList);
 				}
 			}
-			// String debugKey = (String) nodes.keySet().iterator().next();
-			// double debutlat = (Double) ((List) nodes.get(debugKey)).get(0);
-			// double debutlon = (Double) ((List) nodes.get(debugKey)).get(1);
-			// System.out.println("key " + debugKey + " lat " + debutlat + " lon
-			// " + debutlon);
 			Map<String, String> wayName = new HashMap<String, String>();
 			Map waysData = (Map) myutil.ReadJsonMap(waysPath);
 			List waysList = (List) waysData.get("elements");
@@ -114,7 +109,6 @@ public class Pretreatment {
 		try {
 			myutil.WriteJsonList(mapInfoPath, res);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -140,7 +134,7 @@ public class Pretreatment {
 				double lat = (Double) node.get(0);
 				double lon = (Double) node.get(1);
 				int loc = FindGridId(lat, lon);
-				Map seg = GenerateSeg(lastLoc + "_" + key + " " + (j - 1), lastLat, lastLon, lat, lon, type);
+				Map seg = GenerateSeg(lastLoc + "_" + key + "_" + (j - 1), lastLat, lastLon, lat, lon, type);
 				((List) grids.get(String.valueOf(lastLoc))).add(seg);
 				if (lastLoc != loc)
 					((List) grids.get(String.valueOf(loc))).add(seg);
@@ -152,7 +146,6 @@ public class Pretreatment {
 		try {
 			myutil.WriteJsonMap(gridsPath, grids);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

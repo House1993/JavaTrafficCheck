@@ -97,8 +97,8 @@ public class Solve {
 							WriteResule(rowWritten, lastdiff, outputPath, fileIdx++);
 							long end = System.currentTimeMillis();
 							writeCost += end - start;
+							rowWritten = -1;
 						}
-						rowWritten = -1;
 					}
 				} else {
 					lastdiff = i;
@@ -277,19 +277,19 @@ public class Solve {
 	}
 
 	private double CalDistance(double x1, double y1, double x2, double y2) {
-		// x1 = Math.toRadians(x1);
-		// y1 = Math.toRadians(y1);
-		// x2 = Math.toRadians(x2);
-		// y2 = Math.toRadians(y2);
+		x1 = Math.toRadians(x1);
+		y1 = Math.toRadians(y1);
+		x2 = Math.toRadians(x2);
+		y2 = Math.toRadians(y2);
 		double tmpx = x1 - x2;
 		double tmpy = y1 - y2;
-		// double first = Math.sin(tmpx / 2);
-		// first *= first;
-		// double second = Math.sin(tmpy / 2);
-		// second = second * second * Math.cos(x1) * Math.cos(x2);
-		// double angle = 2.0 * Math.asin(Math.sqrt(first + second));
-		// return RADIUS * angle;
-		return Math.sqrt(tmpx * tmpx + tmpy * tmpy);
+		double first = Math.sin(tmpx / 2);
+		first *= first;
+		double second = Math.sin(tmpy / 2);
+		second = second * second * Math.cos(x1) * Math.cos(x2);
+		double angle = 2.0 * Math.asin(Math.sqrt(first + second));
+		return RADIUS * angle;
+		// return Math.sqrt(tmpx * tmpx + tmpy * tmpy);
 	}
 
 	private void TestOverSpeed(int rowS, int rowE) {
