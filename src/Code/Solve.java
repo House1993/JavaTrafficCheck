@@ -404,7 +404,7 @@ public class Solve {
 				instantaneousOverSpeedList.add(instantaneousVList.get(rowS + i) >= unclassifiedSpeedLimit);
 			}
 		}
-		if (wayIdList.get(rowE).compareTo(NWayid) == 0) {
+		if (wayIdList.get(rowE - rowS + 1).compareTo(NWayid) == 0) {
 			NE = rowE;
 			NLen++;
 		} else {
