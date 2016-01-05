@@ -404,7 +404,7 @@ public class Solve {
 				instantaneousOverSpeedList.add(instantaneousVList.get(rowS + i) >= unclassifiedSpeedLimit);
 			}
 		}
-		if (wayIdList.get(rowE - rowS + 1).compareTo(NWayid) == 0) {
+		if (wayIdList.get(rowE - rowS).compareTo(NWayid) == 0) {
 			NE = rowE;
 			NLen++;
 		} else {
@@ -431,7 +431,7 @@ public class Solve {
 			NS = rowE;
 			NE = rowE;
 			NLen = 1;
-			NWayid = wayIdList.get(rowE);
+			NWayid = wayIdList.get(rowE - rowS);
 		}
 		dertDis = mileageList.get(rowE) - mileageList.get(rowE - 1);
 		dertTime = timeList.get(rowE) - timeList.get(rowE - 1);
