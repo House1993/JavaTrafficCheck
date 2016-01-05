@@ -35,6 +35,8 @@ public class Solve {
 	private static List<Double> vList = new ArrayList<Double>();
 	private static List<Boolean> overSpeedList = new ArrayList<Boolean>();
 
+	private static List<String> wayIdList = new ArrayList<String>();
+
 	private static double bestDistance;
 	private static String bestSegment, bestType;
 
@@ -141,8 +143,6 @@ public class Solve {
 			Long time = myutil.DateStrToLong(timeStr);
 			double lon = Double.parseDouble(csvRow[2]);
 			double lat = Double.parseDouble(csvRow[3]);
-			// double mil =
-			// Double.parseDouble(csvRow[8].split(":")[1].split("k")[0]);
 			double mil = Double.parseDouble(csvRow[8]);
 			timeStrList.add(timeStr);
 			timeList.add(time);
@@ -158,18 +158,23 @@ public class Solve {
 		segmentList.clear();
 		typeList.clear();
 		distanceList.clear();
+		wayIdList.clear();
 		for (int i = 0; i + rowS <= rowE; i++) {
 			MatchPointNaive(latitudeList.get(rowS + i), longitudeList.get(rowS + i));
 			String bestWay = "";
+			String bestWayId = "";
 			try {
-				bestWay = (String) wayName.get(bestSegment.split("_")[1]);
+				bestWayId = bestSegment.split("_")[1];
+				bestWay = (String) wayName.get(bestWayId);
 			} catch (Exception e) {
 				bestWay = "";
+				bestWayId = "";
 			}
 			wayNameList.add(bestWay);
 			segmentList.add(bestSegment);
 			typeList.add(bestType);
 			distanceList.add(bestDistance);
+			wayIdList.add(bestWayId);
 		}
 	}
 
@@ -305,6 +310,19 @@ public class Solve {
 	}
 
 	private void TestOverSpeed(int rowS, int rowE) {
+		int PPS = -1;
+		int PPLen = 0;
+		String PPWayid = "";
+		int PS = -1;
+		int PE = -1;
+		int PLen = 0;
+		String PWayid = "";
+		boolean POverspeed = false;
+		int NS = 0;
+		int NE = 0;
+		int NLen = 1;
+		String NWayid = wayIdList.get(0);
+		boolean NOverspeed = false;
 		vList.clear();
 		overSpeedList.clear();
 		double unclassifiedSpeedLimit = (Double) speedLimit.get("unclassified");
@@ -315,11 +333,42 @@ public class Solve {
 			v = dertDis / dertTime * 1000;
 		vList.add(v);
 		try {
-			overSpeedList.add(v >= (Double) speedLimit.get(typeList.get(0)));
+			NOverspeed = (v >= (Double) speedLimit.get(typeList.get(0)));
+			overSpeedList.add(NOverspeed);
 		} catch (Exception e) {
-			overSpeedList.add(v >= unclassifiedSpeedLimit);
+			NOverspeed = (v >= unclassifiedSpeedLimit);
+			overSpeedList.add(NOverspeed);
 		}
 		for (int i = 1; i + rowS < rowE; i++) {
+			if (wayIdList.get(i).compareTo(NWayid) == 0) {
+				NE = i;
+				NLen++;
+			} else {
+				if (PPS != -1) {
+					if (PPWayid.compareTo(NWayid) == 0 && POverspeed && PLen <= 2 && PLen * 4 <= PPLen + NLen) {
+						double tmp = unclassifiedSpeedLimit;
+						try {
+							tmp = (Double) speedLimit.get(typeList.get(NE));
+						} catch (Exception e) {
+							tmp = unclassifiedSpeedLimit;
+						}
+						for (int j = PS; j <= PE; j++)
+							overSpeedList.set(j, vList.get(j) >= tmp);
+					}
+				}
+				PPS = PS;
+				PPLen = PLen;
+				PPWayid = PWayid;
+				PS = NS;
+				PE = NE;
+				PLen = NLen;
+				PWayid = NWayid;
+				POverspeed = NOverspeed;
+				NS = i;
+				NE = i;
+				NLen = 1;
+				NWayid = wayIdList.get(i);
+			}
 			dertDis = mileageList.get(rowS + i + 1) - mileageList.get(rowS + i - 1);
 			dertTime = timeList.get(rowS + i + 1) - timeList.get(rowS + i - 1);
 			v = 0;
@@ -327,10 +376,45 @@ public class Solve {
 				v = dertDis / dertTime * 1000;
 			vList.add(v);
 			try {
-				overSpeedList.add(v >= (Double) speedLimit.get(typeList.get(i)));
+				boolean tmp = (v >= (Double) speedLimit.get(typeList.get(i)));
+				if (tmp)
+					NOverspeed = true;
+				overSpeedList.add(tmp);
 			} catch (Exception e) {
-				overSpeedList.add(v >= unclassifiedSpeedLimit);
+				boolean tmp = (v >= unclassifiedSpeedLimit);
+				if (tmp)
+					NOverspeed = true;
+				overSpeedList.add(tmp);
 			}
+		}
+		if (wayIdList.get(rowE).compareTo(NWayid) == 0) {
+			NE = rowE;
+			NLen++;
+		} else {
+			if (PPS != -1) {
+				if (PPWayid.compareTo(NWayid) == 0 && POverspeed && PLen <= 2 && PLen * 4 <= PPLen + NLen) {
+					double tmp = unclassifiedSpeedLimit;
+					try {
+						tmp = (Double) speedLimit.get(typeList.get(NE));
+					} catch (Exception e) {
+						tmp = unclassifiedSpeedLimit;
+					}
+					for (int j = PS; j <= PE; j++)
+						overSpeedList.set(j, vList.get(j) >= tmp);
+				}
+			}
+			PPS = PS;
+			PPLen = PLen;
+			PPWayid = PWayid;
+			PS = NS;
+			PE = NE;
+			PLen = NLen;
+			PWayid = NWayid;
+			POverspeed = NOverspeed;
+			NS = rowE;
+			NE = rowE;
+			NLen = 1;
+			NWayid = wayIdList.get(rowE);
 		}
 		dertDis = mileageList.get(rowE) - mileageList.get(rowE - 1);
 		dertTime = timeList.get(rowE) - timeList.get(rowE - 1);
@@ -339,9 +423,27 @@ public class Solve {
 			v = dertDis / dertTime * 1000;
 		vList.add(v);
 		try {
-			overSpeedList.add(v >= (Double) speedLimit.get(typeList.get(rowE - rowS)));
+			boolean tmp = (v >= (Double) speedLimit.get(typeList.get(rowE - rowS)));
+			if (tmp)
+				NOverspeed = true;
+			overSpeedList.add(tmp);
 		} catch (Exception e) {
-			overSpeedList.add(v >= unclassifiedSpeedLimit);
+			boolean tmp = (v >= unclassifiedSpeedLimit);
+			if (tmp)
+				NOverspeed = true;
+			overSpeedList.add(tmp);
+		}
+		if (PPS != -1) {
+			if (PPWayid.compareTo(NWayid) == 0 && POverspeed && PLen <= 2 && PLen * 4 <= PPLen + NLen) {
+				double tmp = unclassifiedSpeedLimit;
+				try {
+					tmp = (Double) speedLimit.get(typeList.get(NE));
+				} catch (Exception e) {
+					tmp = unclassifiedSpeedLimit;
+				}
+				for (int j = PS; j <= PE; j++)
+					overSpeedList.set(j, vList.get(j) >= tmp);
+			}
 		}
 	}
 

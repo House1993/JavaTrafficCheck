@@ -1,21 +1,11 @@
-[hadoop@hadoop2 JavaTrafficCheck]$ javac -cp spherical.jar Main.java
 [hadoop@hadoop2 JavaTrafficCheck]$ java -cp spherical.jar Code.Main
-java.lang.ArrayIndexOutOfBoundsException: 8
-        at Code.Solve.ExtractInfo(Solve.java:146)
-        at Code.Solve.WorkOn(Solve.java:70)
-        at Code.Main.main(Main.java:21)
-Read cost 731177
-Write cost 340067
-Load files cost 191892ms
-Match cost 4660773ms
+Read cost 1505076
+Write cost 507454
+Load files cost 105667ms
+Match cost 6839195ms
 
-[hadoop@hadoop2 JavaTrafficCheck]$ javac -cp euler.jar Main.java
 [hadoop@hadoop2 JavaTrafficCheck]$ java -cp euler.jar Code.Main
-java.lang.ArrayIndexOutOfBoundsException: 8
-        at Code.Solve.ExtractInfo(Solve.java:146)
-        at Code.Solve.WorkOn(Solve.java:70)
-        at Code.Main.main(Main.java:21)
-Read cost 675275
-Write cost 330285
-Load files cost 562531ms
-Match cost 2096688ms
+Read cost 672957
+Write cost 252936
+Load files cost 30378ms
+Match cost 2423531ms
