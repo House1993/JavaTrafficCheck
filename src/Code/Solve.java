@@ -148,7 +148,7 @@ public class Solve {
 			double lon = Double.parseDouble(csvRow[2]);
 			double lat = Double.parseDouble(csvRow[3]);
 			double mil = Double.parseDouble(csvRow[8]);
-			double insv = Double.parseDouble(csvRow[4]);
+			double insv = Double.parseDouble(csvRow[4]) / 3.6;
 			timeStrList.add(timeStr);
 			timeList.add(time);
 			longitudeList.add(lon);
