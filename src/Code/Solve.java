@@ -493,7 +493,7 @@ public class Solve {
 		if (dertTime > 0)
 			v = dertDis / dertTime * 1000;
 		vList.add(v);
-		if (segmentList.get(rowS).compareTo("") == 0) {
+		if (segmentList.get(rowE - rowS).compareTo("") == 0) {
 			overSpeedList.add("Not decided");
 			instantaneousOverSpeedList.add("Not decided");
 		} else {
