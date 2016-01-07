@@ -9,3 +9,9 @@ Read cost 672957
 Write cost 252936
 Load files cost 30378ms
 Match cost 2423531ms
+
+[hadoop@hadoop2 JavaTrafficCheck]$ java -cp spherical.jar Code.Main
+Read cost 916006
+Write cost 364059
+Load files cost 522750ms
+Match 120MB cost 6153829ms

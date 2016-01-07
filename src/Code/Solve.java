@@ -36,7 +36,7 @@ public class Solve {
 	private static List<Double> vList = new ArrayList<Double>();
 	private static List<String> overSpeedList = new ArrayList<String>();
 	private static List<Double> instantaneousVList = new ArrayList<Double>();
-	private static List<Boolean> instantaneousOverSpeedList = new ArrayList<Boolean>();
+	private static List<String> instantaneousOverSpeedList = new ArrayList<String>();
 
 	private static List<String> wayIdList = new ArrayList<String>();
 
@@ -205,7 +205,7 @@ public class Solve {
 				double ex = (Double) eNode.get(0), ey = (Double) eNode.get(1);
 				String wayType = (String) data.get("highway");
 				double tmpDistance = GetDistance(lat, lon, sx, sy, ex, ey);
-				if (tmpDistance < bestDistance) {
+				if (tmpDistance < 500 && tmpDistance < bestDistance) {
 					bestDistance = tmpDistance;
 					bestSegment = key;
 					bestType = wayType;
@@ -339,29 +339,37 @@ public class Solve {
 		if (dertTime > 0)
 			v = dertDis / dertTime * 1000;
 		vList.add(v);
-		try {
-			NOverspeed = (v >= (Double) speedLimit.get(typeList.get(0)));
-			if (NOverspeed) {
-				if (v > vconstant)
-					overSpeedList.add("Not decided");
-				else
-					overSpeedList.add("true");
-			} else
-				overSpeedList.add("false");
-		} catch (Exception e) {
-			NOverspeed = (v >= unclassifiedSpeedLimit);
-			if (NOverspeed) {
-				if (v > vconstant)
-					overSpeedList.add("Not decided");
-				else
-					overSpeedList.add("true");
-			} else
-				overSpeedList.add("false");
-		}
-		try {
-			instantaneousOverSpeedList.add(instantaneousVList.get(rowS) >= (Double) speedLimit.get(typeList.get(0)));
-		} catch (Exception e) {
-			instantaneousOverSpeedList.add(instantaneousVList.get(rowS) >= unclassifiedSpeedLimit);
+		if (segmentList.get(0).compareTo("") == 0) {
+			overSpeedList.add("Not decided");
+			instantaneousOverSpeedList.add("Not decided");
+		} else {
+			try {
+				NOverspeed = (v >= (Double) speedLimit.get(typeList.get(0)));
+				if (NOverspeed) {
+					if (v > vconstant)
+						overSpeedList.add("Not decided");
+					else
+						overSpeedList.add("true");
+				} else
+					overSpeedList.add("false");
+			} catch (Exception e) {
+				NOverspeed = (v >= unclassifiedSpeedLimit);
+				if (NOverspeed) {
+					if (v > vconstant)
+						overSpeedList.add("Not decided");
+					else
+						overSpeedList.add("true");
+				} else
+					overSpeedList.add("false");
+			}
+			try {
+				instantaneousOverSpeedList
+						.add(((Boolean) (instantaneousVList.get(rowS) >= (Double) speedLimit.get(typeList.get(0))))
+								.toString());
+			} catch (Exception e) {
+				instantaneousOverSpeedList
+						.add(((Boolean) (instantaneousVList.get(rowS) >= unclassifiedSpeedLimit)).toString());
+			}
 		}
 		for (int i = 1; i + rowS < rowE; i++) {
 			if (wayIdList.get(i).compareTo(NWayid) == 0) {
@@ -407,32 +415,39 @@ public class Solve {
 			if (dertTime > 0)
 				v = dertDis / dertTime * 1000;
 			vList.add(v);
-			try {
-				if (v >= (Double) speedLimit.get(typeList.get(i))) {
-					if (v > vconstant)
-						overSpeedList.add("Not decided");
-					else {
-						overSpeedList.add("true");
-						NOverspeed = true;
-					}
-				} else
-					overSpeedList.add("false");
-			} catch (Exception e) {
-				if (v >= unclassifiedSpeedLimit) {
-					if (v > vconstant)
-						overSpeedList.add("Not decided");
-					else {
-						overSpeedList.add("true");
-						NOverspeed = true;
-					}
-				} else
-					overSpeedList.add("false");
-			}
-			try {
-				instantaneousOverSpeedList
-						.add(instantaneousVList.get(rowS + i) >= (Double) speedLimit.get(typeList.get(i)));
-			} catch (Exception e) {
-				instantaneousOverSpeedList.add(instantaneousVList.get(rowS + i) >= unclassifiedSpeedLimit);
+			if (segmentList.get(i).compareTo("") == 0) {
+				overSpeedList.add("Not decided");
+				instantaneousOverSpeedList.add("Not decided");
+			} else {
+				try {
+					if (v >= (Double) speedLimit.get(typeList.get(i))) {
+						if (v > vconstant)
+							overSpeedList.add("Not decided");
+						else {
+							overSpeedList.add("true");
+							NOverspeed = true;
+						}
+					} else
+						overSpeedList.add("false");
+				} catch (Exception e) {
+					if (v >= unclassifiedSpeedLimit) {
+						if (v > vconstant)
+							overSpeedList.add("Not decided");
+						else {
+							overSpeedList.add("true");
+							NOverspeed = true;
+						}
+					} else
+						overSpeedList.add("false");
+				}
+				try {
+					instantaneousOverSpeedList.add(
+							((Boolean) (instantaneousVList.get(rowS + i) >= (Double) speedLimit.get(typeList.get(i))))
+									.toString());
+				} catch (Exception e) {
+					instantaneousOverSpeedList
+							.add(((Boolean) (instantaneousVList.get(rowS + i) >= unclassifiedSpeedLimit)).toString());
+				}
 			}
 		}
 		if (wayIdList.get(rowE - rowS).compareTo(NWayid) == 0) {
@@ -478,32 +493,39 @@ public class Solve {
 		if (dertTime > 0)
 			v = dertDis / dertTime * 1000;
 		vList.add(v);
-		try {
-			if (v >= (Double) speedLimit.get(typeList.get(rowE - rowS))) {
-				if (v > vconstant)
-					overSpeedList.add("Not decided");
-				else {
-					overSpeedList.add("true");
-					NOverspeed = true;
-				}
-			} else
-				overSpeedList.add("false");
-		} catch (Exception e) {
-			if (v >= unclassifiedSpeedLimit) {
-				if (v > vconstant)
-					overSpeedList.add("Not decided");
-				else {
-					overSpeedList.add("true");
-					NOverspeed = true;
-				}
-			} else
-				overSpeedList.add("false");
-		}
-		try {
-			instantaneousOverSpeedList
-					.add(instantaneousVList.get(rowE) >= (Double) speedLimit.get(typeList.get(rowE - rowS)));
-		} catch (Exception e) {
-			instantaneousOverSpeedList.add(instantaneousVList.get(rowE) >= unclassifiedSpeedLimit);
+		if (segmentList.get(rowS).compareTo("") == 0) {
+			overSpeedList.add("Not decided");
+			instantaneousOverSpeedList.add("Not decided");
+		} else {
+			try {
+				if (v >= (Double) speedLimit.get(typeList.get(rowE - rowS))) {
+					if (v > vconstant)
+						overSpeedList.add("Not decided");
+					else {
+						overSpeedList.add("true");
+						NOverspeed = true;
+					}
+				} else
+					overSpeedList.add("false");
+			} catch (Exception e) {
+				if (v >= unclassifiedSpeedLimit) {
+					if (v > vconstant)
+						overSpeedList.add("Not decided");
+					else {
+						overSpeedList.add("true");
+						NOverspeed = true;
+					}
+				} else
+					overSpeedList.add("false");
+			}
+			try {
+				instantaneousOverSpeedList.add(
+						((Boolean) (instantaneousVList.get(rowE) >= (Double) speedLimit.get(typeList.get(rowE - rowS))))
+								.toString());
+			} catch (Exception e) {
+				instantaneousOverSpeedList
+						.add(((Boolean) (instantaneousVList.get(rowE) >= unclassifiedSpeedLimit)).toString());
+			}
 		}
 		if (PPS != -1) {
 			if (PPWayid.compareTo(NWayid) == 0 && POverspeed && PLen <= 2 && PLen * 4 <= PPLen + NLen) {
