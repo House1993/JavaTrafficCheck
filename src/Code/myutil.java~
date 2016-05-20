@@ -15,10 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
+=======
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 import com.google.gson.Gson;
@@ -26,9 +29,12 @@ import com.google.gson.reflect.TypeToken;
 
 public final class myutil {
 	private static Gson gson = new Gson();
-
+<<<<<<< HEAD
 	private static SimpleDateFormat sdf = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
+=======
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 
 	public static ArrayList ReadJsonList(String path) throws Exception {
 		ArrayList list = new ArrayList();
@@ -46,24 +52,36 @@ public final class myutil {
 		return map;
 	}
 
-
+<<<<<<< HEAD
 	public static void WriteJsonList(String path, List content)
 			throws Exception {
+=======
+	public static void WriteJsonList(String path, List content) throws Exception {
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 		String data = gson.toJson(content, new TypeToken<Object>() {
 		}.getType());
 		WriteFile(path, data);
 	}
 
 	public static void WriteJsonMap(String path, Map content) throws Exception {
+<<<<<<< HEAD
 		String data = gson.toJson(content,
 				new TypeToken<Map<String, Object>>() {
 				}.getType());
+=======
+		String data = gson.toJson(content, new TypeToken<Map<String, Object>>() {
+		}.getType());
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 		WriteFile(path, data);
 	}
 
 	public static List ReadCSV(String csvFilePath) throws Exception {
+<<<<<<< HEAD
 		CsvReader reader = new CsvReader(csvFilePath, ',',
 				Charset.forName("utf-8"));
+=======
+		CsvReader reader = new CsvReader(csvFilePath, ',', Charset.forName("utf-8"));
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 		List<String[]> list = new ArrayList<String[]>();
 		while (reader.readRecord()) {
 			list.add(reader.getValues());
@@ -71,8 +89,12 @@ public final class myutil {
 		return list;
 	}
 
+<<<<<<< HEAD
 	public static void WriteCSV(String csvFilePath, List contents)
 			throws Exception {
+=======
+	public static void WriteCSV(String csvFilePath, List contents) throws Exception {
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 		CsvWriter wr = new CsvWriter(csvFilePath, ',', Charset.forName("utf-8"));
 		int len = contents.size();
 		for (int i = 0; i < len; i++) {
@@ -122,8 +144,12 @@ public final class myutil {
 		return txtContent.toString();
 	}
 
+<<<<<<< HEAD
 	private static void WriteFile(String filePath, String data)
 			throws Exception {
+=======
+	private static void WriteFile(String filePath, String data) throws Exception {
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 		OutputStream out = null;
 		try {
 			out = new FileOutputStream(filePath);
@@ -141,6 +167,7 @@ public final class myutil {
 			}
 		}
 	}
+<<<<<<< HEAD
 
 	public static ArrayList ReadJsonList(Path path, FileSystem fs)
 			throws IOException {
@@ -173,4 +200,6 @@ public final class myutil {
 		in.close();
 		return txtContent.toString();
 	}
+=======
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 }

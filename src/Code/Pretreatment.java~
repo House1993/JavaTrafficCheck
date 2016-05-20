@@ -16,8 +16,13 @@ public class Pretreatment {
 	private static final String waysPath = "./Raw/ways";
 
 	private static Map ways = new HashMap();
+<<<<<<< HEAD
 	private static double minLat = Double.MAX_VALUE, maxLat = Double.MIN_VALUE,
 			minLon = Double.MAX_VALUE, maxLon = Double.MIN_VALUE;
+=======
+	private static double minLat = Double.MAX_VALUE, maxLat = Double.MIN_VALUE, minLon = Double.MAX_VALUE,
+			maxLon = Double.MIN_VALUE;
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 	private static int numLat, numLon;
 
 	public Pretreatment() {
@@ -46,15 +51,23 @@ public class Pretreatment {
 			len = waysList.size();
 			for (int i = 0; i < len; i++) {
 				Map wayInfo = (Map) waysList.get(i);
+<<<<<<< HEAD
 				if (((String) wayInfo.get("type")).compareTo("way") == 0
 						&& wayInfo.containsKey("tags")
+=======
+				if (((String) wayInfo.get("type")).compareTo("way") == 0 && wayInfo.containsKey("tags")
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 						&& ((Map) wayInfo.get("tags")).containsKey("highway")) {
 					double tmpdouble = (Double) wayInfo.get("id");
 					long tmplong = (long) tmpdouble;
 					String tmpId = String.valueOf(tmplong);
 					Map res = new HashMap();
+<<<<<<< HEAD
 					res.put("highway",
 							((Map) wayInfo.get("tags")).get("highway"));
+=======
+					res.put("highway", ((Map) wayInfo.get("tags")).get("highway"));
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 					List resList = new ArrayList();
 					List nodesOnWay = (List) wayInfo.get("nodes");
 					int length = nodesOnWay.size();
@@ -72,8 +85,12 @@ public class Pretreatment {
 						ways.put(tmpId, res);
 						String tmpName = "";
 						if (((Map) wayInfo.get("tags")).containsKey("name"))
+<<<<<<< HEAD
 							tmpName = (String) ((Map) wayInfo.get("tags"))
 									.get("name");
+=======
+							tmpName = (String) ((Map) wayInfo.get("tags")).get("name");
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 						wayName.put(tmpId, tmpName);
 					}
 				}
@@ -137,8 +154,12 @@ public class Pretreatment {
 				double lat = (Double) node.get(0);
 				double lon = (Double) node.get(1);
 				int loc = FindGridId(lat, lon);
+<<<<<<< HEAD
 				Map seg = GenerateSeg(lastLoc + "_" + key + "_" + (j - 1),
 						lastLat, lastLon, lat, lon, type);
+=======
+				Map seg = GenerateSeg(lastLoc + "_" + key + "_" + (j - 1), lastLat, lastLon, lat, lon, type);
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 				((List) grids.get(String.valueOf(lastLoc))).add(seg);
 				if (lastLoc != loc)
 					((List) grids.get(String.valueOf(loc))).add(seg);
@@ -164,8 +185,12 @@ public class Pretreatment {
 		return locX * numLon + locY;
 	}
 
+<<<<<<< HEAD
 	private Map GenerateSeg(String id, double slat, double slon, double elat,
 			double elon, String type) {
+=======
+	private Map GenerateSeg(String id, double slat, double slon, double elat, double elon, String type) {
+>>>>>>> 86b150ad6355ebaa6e70228cc384df2802f65a5a
 		Map res = new HashMap();
 		Map tmp = new HashMap();
 		List<Double> s = new ArrayList<Double>();
